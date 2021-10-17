@@ -1,13 +1,11 @@
 /* global require exports */
 const { validationResult } = require("express-validator");
-const { StatusCodes } = require("http-status-codes");
 
 /**
  * Finds the validation errors in this request and wraps
  * @param {import('express').Request} request
- * @param {import('express').Response} response
  */
-exports.validationResponse = (request, response) => {
+exports.validationResponse = (request) => {
   const errors = validationResult(request);
   if (!errors.isEmpty()) {
     const valErrors = errors.array().map((error) => ({
@@ -15,14 +13,12 @@ exports.validationResponse = (request, response) => {
       field: error.param,
       value: error.value,
     }));
-    return response.status(StatusCodes.BAD_REQUEST).json({
-      error: {
-        name: "ValidationError",
-        message:
-          "Request validation failed. Request body contains invalid values",
-        validation_errors: valErrors,
-      },
-    });
+    const error = new Error(
+      "Request validation failed. Request body contains invalid values"
+    );
+    error.name = "ValidationError";
+    error.validation_errors = valErrors;
+    throw error;
   }
 
   return true;

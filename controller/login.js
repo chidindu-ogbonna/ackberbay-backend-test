@@ -33,11 +33,21 @@ const login = async (request, response) => {
       exp: expiry,
     };
     return response.status(StatusCodes.OK).json({ data: { user } });
-  } catch (err) {
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      return response.status(StatusCodes.BAD_REQUEST).json({
+        error: {
+          name: error.name,
+          message: error.message,
+          validation_errors: error.validation_errors,
+        },
+      });
+    }
+
     return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       error: {
-        name: err.name,
-        message: err.message,
+        name: error.name,
+        message: error.message,
       },
     });
   }

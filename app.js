@@ -1,15 +1,13 @@
 /* global require module */
 require("dotenv").config();
 const express = require("express");
+const { StatusCodes } = require("http-status-codes");
 const auth = require("./middleware/auth");
 const login = require("./controller/login");
 const thumbnail = require("./controller/thumbnail");
-const patch = require("./controller/patch");
-const { StatusCodes } = require("http-status-codes");
 
 const { validators: loginValidators } = login;
 const { validators: thumbnailValidators } = thumbnail;
-const { validators: patchValidators } = patch;
 
 const app = express();
 
