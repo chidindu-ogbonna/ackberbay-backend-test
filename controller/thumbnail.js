@@ -6,7 +6,7 @@ const { promisify } = require("util");
 const stream = require("stream");
 const { body } = require("express-validator");
 const { StatusCodes } = require("http-status-codes");
-const { validationResponse } = require("../utils");
+const { validationResponse, logger } = require("../utils");
 
 const pipeline = promisify(stream.pipeline);
 
@@ -37,25 +37,9 @@ const thumbnail = async (request, response) => {
       .jpeg({ mozjpeg: true })
       .toFile(thumbnailLocation);
 
-    // TODO: Save in cloudinary
-
-    // var fileName = req.params.name;
     return response.sendFile(thumbnailLocation);
-
-    // response.sendFile(fileName, options, (err) => {
-    //   if (err) {
-    //     next(err);
-    //   } else {
-    //     console.log("Sent:", fileName);
-    //   }
-    // });
-
-    // return response.status(StatusCodes.OK).json({
-    //   data: {
-    //     filename: `${randomString}_thumbnail.${ext}`,
-    //   },
-    // });
   } catch (error) {
+    logger.error(error);
     if (error.name === "ValidationError") {
       return response.status(StatusCodes.BAD_REQUEST).json({
         error: {

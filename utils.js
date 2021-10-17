@@ -1,4 +1,5 @@
 /* global require exports */
+const winston = require("winston");
 const { validationResult } = require("express-validator");
 
 /**
@@ -23,3 +24,10 @@ exports.validationResponse = (request) => {
 
   return true;
 };
+
+exports.logger = winston.createLogger({
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: "combined.log" }),
+  ],
+});

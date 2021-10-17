@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const { body } = require("express-validator");
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
-const { validationResponse } = require("../utils");
+const { validationResponse, logger } = require("../utils");
 
 /**
  * Login controller
@@ -34,6 +34,8 @@ const login = async (request, response) => {
     };
     return response.status(StatusCodes.OK).json({ data: { user } });
   } catch (error) {
+    logger.error(error);
+
     if (error.name === "ValidationError") {
       return response.status(StatusCodes.BAD_REQUEST).json({
         error: {

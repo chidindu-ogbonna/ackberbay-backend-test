@@ -2,7 +2,7 @@
 const { body } = require("express-validator");
 const jsonpatch = require("jsonpatch");
 const { StatusCodes } = require("http-status-codes");
-const { validationResponse } = require("../utils");
+const { validationResponse, logger } = require("../utils");
 
 /**
  * Apply Json Patch Request body should contain a JSON object and a JSON patch object
@@ -19,6 +19,7 @@ const patch = async (request, response) => {
 
     return response.status(StatusCodes.OK).json({ data: { patched_json } });
   } catch (error) {
+    logger.error(error);
     if (error.name === "ValidationError") {
       return response.status(StatusCodes.BAD_REQUEST).json({
         error: {
