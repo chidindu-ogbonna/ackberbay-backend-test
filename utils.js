@@ -29,6 +29,13 @@ const loggerFormat = format.printf(({ level, message, label, timestamp }) => {
   return `${timestamp} [${label}] ${level.toUpperCase()}: ${message}`;
 });
 
+/**
+ * Creates a logger for the given type
+ * @example
+ * const { logger } = require("./utils");
+ * logger.info("Hello world");
+ * logger.error("Something went wrong");
+ */
 exports.logger = createLogger({
   format: format.combine(
     format.label({ label: "HackerBay Logs" }),

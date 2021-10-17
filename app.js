@@ -21,14 +21,6 @@ app.post("/thumbnail", auth, ...thumbnailValidators, thumbnail);
 
 app.post("/patch", auth, ...patchValidators, patch);
 
-app.get("/", (_, response) => {
-  return response.status(StatusCodes.OK).json({
-    data: {
-      message: "Welcome 🙌",
-    },
-  });
-});
-
 app.use("*", (_, response) => {
   return response.status(StatusCodes.NOT_FOUND).json({
     error: {
