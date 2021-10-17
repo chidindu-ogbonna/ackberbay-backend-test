@@ -1,5 +1,5 @@
 /* global require exports */
-const winston = require("winston");
+const { createLogger, format, transports } = require("winston");
 const { validationResult } = require("express-validator");
 
 /**
@@ -25,9 +25,21 @@ exports.validationResponse = (request) => {
   return true;
 };
 
-exports.logger = winston.createLogger({
+const loggerFormat = format.printf(({ level, message, label, timestamp }) => {
+  return `${timestamp} [${label}] ${level.toUpperCase()}: ${message}`;
+});
+
+exports.logger = createLogger({
+  format: format.combine(
+    format.label({ label: "HackerBay Logs" }),
+    format.timestamp(),
+    loggerFormat
+  ),
+
   transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: "combined.log" }),
+    new transports.Console(),
+    new transports.File({
+      filename: "combined.log",
+    }),
   ],
 });
