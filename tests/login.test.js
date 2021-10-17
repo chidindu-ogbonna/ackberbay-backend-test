@@ -36,7 +36,9 @@ describe("Login", () => {
     it("should return a validation error if request contains invalid body", (done) => {
       const reqBody = {
         username: faker.datatype.boolean() ? faker.internet.userName() : "",
-        password: faker.internet.password(faker.datatype.number({ max: 5 })),
+        password: faker.internet.password(
+          faker.datatype.number({ min: 1, max: 5 })
+        ),
       };
 
       chai
