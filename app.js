@@ -5,9 +5,11 @@ const { StatusCodes } = require("http-status-codes");
 const auth = require("./middleware/auth");
 const login = require("./controller/login");
 const thumbnail = require("./controller/thumbnail");
+const patch = require("./controller/patch");
 
 const { validators: loginValidators } = login;
 const { validators: thumbnailValidators } = thumbnail;
+const { validators: patchValidators } = patch;
 
 const app = express();
 
@@ -17,9 +19,7 @@ app.post("/login", ...loginValidators, login);
 
 app.post("/thumbnail", auth, ...thumbnailValidators, thumbnail);
 
-// app.post("/patch", auth, (request, response) => {
-//   response.status(200).send("Welcome 🙌 ");
-// });
+app.post("/patch", auth, ...patchValidators, patch);
 
 app.get("/", (_, response) => {
   return response.status(StatusCodes.OK).json({
