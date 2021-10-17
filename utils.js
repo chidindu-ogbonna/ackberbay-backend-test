@@ -1,4 +1,4 @@
-/* global require exports */
+/* global require exports process */
 const { createLogger, format, transports } = require("winston");
 const { validationResult } = require("express-validator");
 
@@ -30,6 +30,23 @@ const loggerFormat = format.printf(({ level, message, label, timestamp }) => {
 });
 
 /**
+ * Set transports for the logger based on the environment
+ */
+const setTransports = () => {
+  const loggerTransport = [
+    new transports.File({
+      filename: "combined.log",
+    }),
+  ];
+
+  if (process.env.NODE_ENV !== "TEST") {
+    loggerTransport.push(new transports.Console());
+  }
+
+  return loggerTransport;
+};
+
+/**
  * Creates a logger for the given type
  * @example
  * const { logger } = require("./utils");
@@ -43,10 +60,5 @@ exports.logger = createLogger({
     loggerFormat
   ),
 
-  transports: [
-    new transports.Console(),
-    new transports.File({
-      filename: "combined.log",
-    }),
-  ],
+  transports: [...setTransports()],
 });
