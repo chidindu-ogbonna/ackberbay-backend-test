@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "cat .example.env > .env && nodemon index.js",
-    "test": "cat .test.env > .env && mocha tests/*.test.js --exit"
+    "test": "cat .test.env > .env && nyc --reporter=html mocha tests/*.test.js --exit",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,7 @@
     "jiff": "^0.7.3",
     "mocha": "^9.1.3",
     "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
     "prettier": "^2.2.1"
   }
 }
